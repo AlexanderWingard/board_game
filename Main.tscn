@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Models/Pawn.tscn" type="PackedScene" id=2]
@@ -14,11 +14,14 @@ height = 0.5
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 1, 0, 0, 1 )
 
-[sub_resource type="SpatialMaterial" id=4]
-albedo_color = Color( 0.054902, 0, 1, 1 )
-
 [node name="Main" type="Spatial"]
 script = ExtResource( 1 )
+
+[node name="RayCast" type="RayCast" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, -8.9407e-08, 0, 8.9407e-08, 1, 0, 3.041, 4.70782 )
+enabled = true
+collide_with_areas = true
+collide_with_bodies = false
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 3.041, 4.70782 )
@@ -43,10 +46,15 @@ script = ExtResource( 3 )
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
 
-[node name="Grab" type="MeshInstance" parent="Cursor"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.35331 )
-mesh = SubResource( 2 )
-skeleton = NodePath("../..")
-material/0 = SubResource( 4 )
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -517.0
+margin_top = -305.0
+margin_right = -506.0
+margin_bottom = -294.0
+color = Color( 0.972549, 0, 0, 1 )
 
 [connection signal="input_event" from="Pawn/Area" to="Input" method="_on_Area_input_event"]
