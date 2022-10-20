@@ -6,12 +6,23 @@ func _physics_process(delta):
 	var from = $"../Camera".project_ray_origin(mouse_pos)
 	var to = from + $"../Camera".project_ray_normal(mouse_pos) * 1000
 	var cursor_pos = ground_plane.intersects_ray(from, to)
-	if cursor_pos != null:
-		$"../Cursor".global_transform.origin = cursor_pos
-		if grabbed:
-			$"../Pawn".global_translation = cursor_pos
+	if grabbed:
+		$"../Pawn".global_translation = $"../Cursor/Grab".global_translation
+
+	if not cursor_pos:
+		return
+	$"../Cursor".global_transform.origin = cursor_pos
 
 var grabbed = false
+func _input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+		if not event.pressed:
+			grabbed = false
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
 func _on_Area_input_event(camera, event, position, normal, shape_idx):
 	if event is InputEventMouseButton:
 		grabbed = event.pressed
+		if event.pressed:
+			var grab_point = $"../Pawn".global_transform.origin
+			$"../Cursor/Grab".global_transform.origin = grab_point

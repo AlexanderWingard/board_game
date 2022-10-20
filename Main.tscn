@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Models/Pawn.tscn" type="PackedScene" id=2]
@@ -13,6 +13,9 @@ height = 0.5
 
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0.054902, 0, 1, 1 )
 
 [node name="Main" type="Spatial"]
 script = ExtResource( 1 )
@@ -39,5 +42,11 @@ script = ExtResource( 3 )
 [node name="Cursor" type="MeshInstance" parent="."]
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
+
+[node name="Grab" type="MeshInstance" parent="Cursor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.35331 )
+mesh = SubResource( 2 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 4 )
 
 [connection signal="input_event" from="Pawn/Area" to="Input" method="_on_Area_input_event"]
