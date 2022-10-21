@@ -38,7 +38,10 @@ func _input(event):
 				Input.warp_mouse_position(fake_mouse_pos + old_mouse_offset)
 			pressed = false
 			$"../Highlighter".monitoring = false
-			$"../Pawn".global_translation.y = 0
+			if active_square:
+				var tween = create_tween()
+				tween.tween_property($"../Pawn", "global_translation", active_square.get_parent().global_translation, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
 
 func _on_Area_input_event(camera, event, position, normal, shape_idx):
 	if event is InputEventMouseButton:
@@ -53,7 +56,10 @@ func _on_Area_input_event(camera, event, position, normal, shape_idx):
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
+
+var active_square
 func _on_Highlighter_area_entered(area):
+	active_square = area
 	toggle_highlight(area, true)
 
 func _on_Highlighter_area_exited(area):
