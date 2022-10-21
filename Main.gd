@@ -7,7 +7,7 @@ func _ready():
 		for y in 8:
 			var square = preload("res://Square.tscn").instance()
 			add_child(square)
-			square.transform.origin = Vector3(-3.5 + x, 0, -4.5 + y)
+			square.transform.origin = Vector3(-3.5 + x, 0, -3.5 + y)
 			square.name = str("square_", x, "_", y)
 			if (x + y) % 2 == 0:
 				square.get_node("MeshInstance").set_surface_material(0, white_material)
