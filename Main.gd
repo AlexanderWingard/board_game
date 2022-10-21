@@ -10,6 +10,7 @@ func _ready():
 			square.transform.origin = Vector3(-3.5 + x, 0, -3.5 + y)
 			square.name = str("square_", x, "_", y)
 			if (x + y) % 2 == 0:
-				square.get_node("MeshInstance").set_surface_material(0, white_material)
+				square.color = white_material
 			else:
-				square.get_node("MeshInstance").set_surface_material(0, black_material)
+				square.color = black_material
+			square.init()

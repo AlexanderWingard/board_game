@@ -13,6 +13,7 @@ func _physics_process(delta):
 	if pressed and cursor_pos:
 		$"../Pawn".global_translation = cursor_pos
 		$"../ColorRect".rect_position = fake_mouse_pos
+		$"../Highlighter".global_translation = cursor_pos
 
 var pressed = false
 var rotating = false
@@ -32,10 +33,12 @@ func _input(event):
 			if pressed:
 				Input.warp_mouse_position(fake_mouse_pos + old_mouse_offset)
 			pressed = false
+			$"../Highlighter".monitoring = false
 
 func _on_Area_input_event(camera, event, position, normal, shape_idx):
 	if event is InputEventMouseButton:
 		pressed = event.pressed
+		$"../Highlighter".monitoring = event.pressed
 		if event.pressed:
 			rotating = false
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -43,3 +46,14 @@ func _on_Area_input_event(camera, event, position, normal, shape_idx):
 			old_mouse_offset = get_viewport().get_mouse_position() - fake_mouse_pos
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func _on_Highlighter_area_entered(area):
+	toggle_highlight(area, true)
+
+func _on_Highlighter_area_exited(area):
+	toggle_highlight(area, false)
+
+func toggle_highlight(area, active):
+	var n = area.get_node_or_null("..")
+	if n != null:
+		n.highlight(active)

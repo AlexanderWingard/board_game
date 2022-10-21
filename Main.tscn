@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Models/Pawn.tscn" type="PackedScene" id=2]
@@ -13,6 +13,9 @@ height = 0.5
 
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="SphereShape" id=4]
+radius = 0.001
 
 [node name="Main" type="Spatial"]
 script = ExtResource( 1 )
@@ -56,4 +59,15 @@ transform = Transform( 1, 0, 0, 0, 0.884801, 0.46597, 0, -0.46597, 0.884801, 0, 
 [node name="Camera" type="Camera" parent="CameraRig"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.560493, 7.443 )
 
+[node name="Highlighter" type="Area" parent="."]
+input_ray_pickable = false
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape" parent="Highlighter"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.412228, 0 )
+shape = SubResource( 4 )
+
 [connection signal="input_event" from="Pawn/Area" to="Input" method="_on_Area_input_event"]
+[connection signal="area_entered" from="Highlighter" to="Input" method="_on_Highlighter_area_entered"]
+[connection signal="area_exited" from="Highlighter" to="Input" method="_on_Highlighter_area_exited"]
