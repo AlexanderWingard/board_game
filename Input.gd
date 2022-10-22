@@ -5,26 +5,26 @@ onready var camera_rig = $"../CameraRig"
 var fake_mouse_pos = Vector2.ZERO
 var initial_position = Vector3.ZERO
 var sensitivity = 0.005
-
+var picked = null
 
 func _physics_process(delta):
-	var ground_plane = Plane(Vector3.UP, 0)
-	var from = camera.project_ray_origin(fake_mouse_pos)
-	var to = from + camera.project_ray_normal(fake_mouse_pos) * 1000
-	var cursor_pos = ground_plane.intersects_ray(from, to)
-	if pressed and cursor_pos:
-		cursor_pos.y = clamp(initial_position.distance_to(cursor_pos) / 4.0, 0, 0.4)
-		$"../Pawn".global_translation = cursor_pos
-		$"../ColorRect".rect_position = fake_mouse_pos
-		$"../Highlighter".global_translation = cursor_pos
+	if picked:
+		var ground_plane = Plane(Vector3.UP, 0)
+		var from = camera.project_ray_origin(fake_mouse_pos)
+		var to = from + camera.project_ray_normal(fake_mouse_pos) * 1000
+		var cursor_pos = ground_plane.intersects_ray(from, to)
+		if cursor_pos:
+			cursor_pos.y = clamp(initial_position.distance_to(cursor_pos) / 4.0, 0, 0.4)
+			picked.global_translation = cursor_pos
+			$"../ColorRect".rect_position = fake_mouse_pos
+			$"../Highlighter".global_translation = cursor_pos
 
-var pressed = false
 var rotating = false
 var old_mouse_offset = Vector2.ZERO
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		if pressed:
+		if picked:
 			fake_mouse_pos += event.relative
 		elif rotating:
 			camera_rig.rotation.y -= event.relative.x*sensitivity
@@ -34,23 +34,23 @@ func _input(event):
 		rotating = event.pressed
 		if not event.pressed:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-			if pressed:
+			if picked:
 				Input.warp_mouse_position(fake_mouse_pos + old_mouse_offset)
-			pressed = false
+				if active_square:
+					var tween = create_tween()
+					tween.tween_property(picked, "global_translation", active_square.get_parent().global_translation, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+			picked = null
 			$"../Highlighter".monitoring = false
-			if active_square:
-				var tween = create_tween()
-				tween.tween_property($"../Pawn", "global_translation", active_square.get_parent().global_translation, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 
-func _on_Area_input_event(camera, event, position, normal, shape_idx):
+func _on_Area_input_event(camera, event, position, normal, shape_idx, node):
 	if event is InputEventMouseButton:
-		pressed = event.pressed
 		$"../Highlighter".monitoring = event.pressed
 		if event.pressed:
+			picked = node
 			rotating = false
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-			initial_position = $"../Pawn".global_transform.origin
+			initial_position = node.global_transform.origin
 			fake_mouse_pos = camera.unproject_position(initial_position)
 			old_mouse_offset = get_viewport().get_mouse_position() - fake_mouse_pos
 		else:

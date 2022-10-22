@@ -1,5 +1,20 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Models/Pawn.glb" type="PackedScene" id=1]
 
+[sub_resource type="CylinderShape" id=1]
+
+[sub_resource type="SphereShape" id=2]
+
 [node name="Pawn" instance=ExtResource( 1 )]
+transform = Transform( 0.285896, 0, 0, 0, 0.285896, 0, 0, 0, 0.285896, 0, 0, 0 )
+
+[node name="Area" type="Area" parent="." index="1"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.978685, 0 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="Area" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.75211, 0 )
+shape = SubResource( 2 )
