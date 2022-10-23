@@ -44,7 +44,7 @@ func _input(event):
 
 
 func _on_Area_input_event(camera, event, position, normal, shape_idx, node):
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		$"../Highlighter".monitoring = event.pressed
 		if event.pressed:
 			picked = node
