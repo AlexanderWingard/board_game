@@ -41,7 +41,10 @@ func _input(event):
 					tween.tween_property(picked, "global_translation", active_square.get_parent().global_translation, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 			picked = null
 			$"../Highlighter".monitoring = false
-
+	elif event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_UP:
+		camera.translation -= Vector3(0,0,0.2)
+	elif event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_DOWN:
+		camera.translation += Vector3(0,0,0.2)
 
 func _on_Area_input_event(camera, event, position, normal, shape_idx, node):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
