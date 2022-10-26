@@ -20,6 +20,5 @@ func _ready():
 func create_pawn(pos, material):
 	var pawn = preload("res://Models/Pawn.tscn").instance()
 	add_child(pawn)
-	pawn.get_node("Area").connect("input_event", $"Input", "_on_Area_input_event", [pawn])
 	pawn.get_node("Sphere").set_surface_material(0, material)
 	pawn.global_translation = pos

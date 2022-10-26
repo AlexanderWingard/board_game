@@ -10,6 +10,7 @@
 transform = Transform( 0.285896, 0, 0, 0, 0.285896, 0, 0, 0, 0.285896, 0, 0, 0 )
 
 [node name="Area" type="Area" parent="." index="1"]
+collision_layer = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.978685, 0 )
