@@ -5,6 +5,8 @@ var touch_events = {}
 var first_touch = false
 var selected = null
 var rotating = false
+var left_mouse = false
+var right_mouse = false
 var old_mouse_offset = Vector2.ZERO
 var fake_mouse_pos = Vector2.ZERO
 var inital_position = Vector3.ZERO
@@ -20,16 +22,27 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT:
 			if event.pressed:
-				pass
+				left_mouse = true
+				update_event(0, event.position)
 			else:
-				pass
+				left_mouse = false
+				touch_events.erase(0)
+		elif event.button_index == BUTTON_RIGHT:
+			if event.pressed:
+				right_mouse = true
+				update_event(1, event.position)
+			else:
+				right_mouse = false
+				touch_events.erase(1)
 		elif event.button_index == BUTTON_WHEEL_UP:
 			camera.translation -= Vector3(0,0,0.2)
 		elif event.button_index == BUTTON_WHEEL_DOWN:
 			camera.translation += Vector3(0,0,0.2)
 	elif event is InputEventMouseMotion:
-		return
-#		relative = event.relative
+		if left_mouse:
+			update_event(0, event.position)
+		if right_mouse:
+			update_event(1, event.position)
 	elif event is InputEventScreenDrag:
 		update_event(event.index, event.position)
 	elif event is InputEventScreenTouch:
